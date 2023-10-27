@@ -27,4 +27,12 @@ contract Token is ERC20, AccessControl {
         require(hasRole(BURNER_ROLE, msg.sender), "Caller is not a burner");
         _burn(from, amount);
     }
+
+    function grantMinterRole(address bridgeContract) public onlyRole(ADMIN_ROLE) {
+        grantRole(MINTER_ROLE, bridgeContract);
+    }
+
+    function grantBurnerRole(address bridgeContract) public onlyRole(ADMIN_ROLE) {
+        grantRole(BURNER_ROLE, bridgeContract);
+    }
 }

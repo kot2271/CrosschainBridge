@@ -21,6 +21,11 @@ if(!mnemonic) {
 const rpcUrl: string | undefined = process.env.RPC_URL_MUMBAI;
 if(!rpcUrl) {
   throw new Error("Please set your RPC_URL in a .env file")
+}
+
+const bscApiKey: string | undefined = process.env.BSCSCAN_API_KEY;
+if(!bscApiKey) {
+  throw new Error("Please set your BSCSCAN_API_KEY in a .env file")
 } 
 
 const chainIds = {
@@ -43,7 +48,7 @@ function getChainConfig(chain: keyof typeof chainIds ) {
       jsonRpcUrl = "https://api.avax.network/ext/bc/C/rpc";
       break;
     case "bsc":
-      jsonRpcUrl = "https://bsc-dataseed1.binance.org";
+      jsonRpcUrl = `https://1rpc.io/${bscApiKey}/bnb`;
       break;
     case "goerli":
       jsonRpcUrl = `${rpcUrl}`

@@ -154,7 +154,7 @@ contract Bridge is ReentrancyGuard, AccessControl {
   }
 
   modifier adminControl() {
-    require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Bridge: Only admin can use this function");
+    require(hasRole(adminRole, msg.sender), "Bridge: Only admin can use this function");
       _;
   }
 

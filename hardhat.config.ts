@@ -23,15 +23,10 @@ if(!rpcUrl) {
   throw new Error("Please set your RPC_URL in a .env file")
 }
 
-const bscApiKey: string | undefined = process.env.BSCSCAN_API_KEY;
-if(!bscApiKey) {
-  throw new Error("Please set your BSCSCAN_API_KEY in a .env file")
-} 
-
 const chainIds = {
   "arbitrum-mainnet": 42161,
   avalanche: 43114,
-  bsc: 56, 
+  bscTestnet: 97, 
   ganache: 1337,
   goerli: 5,
   hardhat: 31337,
@@ -47,8 +42,8 @@ function getChainConfig(chain: keyof typeof chainIds ) {
     case "avalanche":
       jsonRpcUrl = "https://api.avax.network/ext/bc/C/rpc";
       break;
-    case "bsc":
-      jsonRpcUrl = `https://1rpc.io/${bscApiKey}/bnb`;
+    case "bscTestnet":
+      jsonRpcUrl = `${process.env.RPC_URL_BINANCE}`;
       break;
     case "goerli":
       jsonRpcUrl = `${rpcUrl}`
@@ -72,7 +67,7 @@ const config: {} = {
     apiKey: {
       arbitrumOne: process.env.ARBISCAN_API_KEY || "",
       avalanche: process.env.SNOWTRACE_API_KEY || "",
-      bsc: process.env.BSCSCAN_API_KEY || "",
+      bscTestnet: process.env.BSCSCAN_API_KEY || "",
       mainnet: process.env.ETHERSCAN_API_KEY || "",
       optimisticEthereum: process.env.OPTIMISM_API_KEY || "",
       polygon: process.env.POLYGONSCAN_API_KEY || "",
@@ -102,7 +97,7 @@ const config: {} = {
     },
     arbitrum: getChainConfig("arbitrum-mainnet"),
     avalanche: getChainConfig("avalanche"),
-    bsc: getChainConfig("bsc"),
+    bscTestnet: getChainConfig("bscTestnet"),
     mainnet: getChainConfig("mainnet"),
     optimism: getChainConfig("optimism-mainnet"),
     "polygon-mainnet": getChainConfig("polygon-mainnet"),

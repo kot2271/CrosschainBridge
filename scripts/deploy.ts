@@ -1,5 +1,5 @@
 import { ethers, run, network } from "hardhat";
-import { Bridge } from "../src/types";
+import { providers } from "ethers";
 
 const delay = async (time: number) => {
   return new Promise((resolve: any) => {
@@ -28,9 +28,9 @@ async function main() {
   console.log(`Starting verify ${tstName}...`);
 
   try {
-    await run('verify', {
+    await run('verify:verify', {
       address: mumbaiToken!.address,
-      constructorArguments: [tstName, tstSymbol],
+      constructorArguments: [ tstName, tstSymbol ],
       contract: 'contracts/Token.sol:Token',
       network: 'polygon-mumbai'
     });
@@ -41,7 +41,7 @@ async function main() {
 
   const mumbaiChainId = 80001;
   const [mumbaiValidator] = await ethers.getSigners();
-  let mumbaiBridge: Bridge;
+  let mumbaiBridge;
 
   try {
   const MumbaiBridge = await ethers.getContractFactory(bridgeName);
@@ -49,7 +49,7 @@ async function main() {
   await mumbaiBridge.deployed();
 
   console.log(`Bridge in polygon-mumbai deployed to: ${mumbaiBridge.address}`);
-  console.log(`Validator in polygon-mumbai : ${mumbaiValidator.address}`);
+  console.log(`Validator in polygon-mumbai: ${mumbaiValidator.address}`);
   } catch (e: any) {
     console.log(e.message)
   }
@@ -58,9 +58,9 @@ async function main() {
   console.log('Starting verify Bridge contract in polygon-mumbai ...');
 
   try {
-    await run('verify', {
+    await run('verify:verify', {
       address: mumbaiBridge!.address,
-      constructorArguments: [mumbaiValidator.address, mumbaiChainId],
+      constructorArguments: [ mumbaiValidator.address, mumbaiChainId ],
       contract: 'contracts/Bridge.sol:Bridge',
       network: 'polygon-mumbai'
     });
@@ -70,7 +70,7 @@ async function main() {
   }
 }
 
-if (network.name === 'bsc') {
+if (network.name === 'bscTestnet') {
 
   const BinanceToken = await ethers.getContractFactory(tstName);
   const binanceToken = await BinanceToken.deploy(tstName, tstSymbol);
@@ -83,18 +83,18 @@ if (network.name === 'bsc') {
   console.log(`Starting verify ${tstName}...`);
 
   try {
-    await run('verify', {
+    await run('verify:verify', {
       address: binanceToken!.address,
-      constructorArguments: [tstName, tstSymbol],
+      constructorArguments: [ tstName, tstSymbol ],
       contract: 'contracts/Token.sol:Token',
-      network: 'bsc'
+      network: 'bscTestnet'
     });
     console.log('Verify success')
   } catch(e: any) {
     console.log(e.message)
   }
 
-  const binanceChainId = 56;
+  const binanceChainId = 97;
   const [binanceValidator] = await ethers.getSigners();
   let binanceBridge;
 
@@ -103,8 +103,8 @@ if (network.name === 'bsc') {
     binanceBridge = await BinanceBridge.deploy(binanceValidator.address, binanceChainId);
     await binanceBridge.deployed();
   
-    console.log(`Bridge in Binance Smart Chain deployed to: ${binanceBridge.address}\n`);
-    console.log(`Validator in Binance Smart Chain : ${binanceValidator.address}\n`);
+    console.log(`Bridge in Binance Smart Chain deployed to: ${binanceBridge.address}`);
+    console.log(`Validator in Binance Smart Chain: ${binanceValidator.address}`);
     } catch (e: any) {
       console.log(e.message)
     }
@@ -113,18 +113,17 @@ if (network.name === 'bsc') {
     console.log('Starting verify Bridge contract in Binance Smart Chain ...');
   
     try {
-      await run('verify', {
+      await run('verify:verify', {
         address: binanceBridge!.address,
-        constructorArguments: [binanceValidator.address, binanceChainId],
+        constructorArguments: [ binanceValidator.address, binanceChainId ],
         contract: 'contracts/Bridge.sol:Bridge',
-        network: 'bsc'
+        network: 'bscTestnet'
       });
       console.log('Verify success')
     } catch(e: any) {
       console.log(e.message)
     }
   }
-
 }
 
 main()

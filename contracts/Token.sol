@@ -23,10 +23,7 @@ contract Token is ERC20, AccessControl {
     /**
      * @notice Constructor to initialize roles
      */
-    constructor(
-        string memory name,
-        string memory symbol
-    ) ERC20(name, symbol) {
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
         _grantRole(BURNER_ROLE, msg.sender);
@@ -52,14 +49,18 @@ contract Token is ERC20, AccessControl {
     /**
      * @notice Grant minter role to bridge contract
      */
-    function grantMinterRole(address bridgeContract) external onlyRole(ADMIN_ROLE) {
+    function grantMinterRole(
+        address bridgeContract
+    ) external onlyRole(ADMIN_ROLE) {
         grantRole(MINTER_ROLE, bridgeContract);
     }
 
     /**
      * @notice Grant burner role to bridge contract
      */
-    function grantBurnerRole(address bridgeContract) external onlyRole(ADMIN_ROLE) {
+    function grantBurnerRole(
+        address bridgeContract
+    ) external onlyRole(ADMIN_ROLE) {
         grantRole(BURNER_ROLE, bridgeContract);
     }
 }
